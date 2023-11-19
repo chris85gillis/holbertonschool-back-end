@@ -4,6 +4,7 @@ import requests
 import sys
 import csv
 
+
 def get_employee_todo_progress(employee_id):
     """constructing URLs for user and todos data"""
     base_url = 'https://jsonplaceholder.typicode.com/'
@@ -31,7 +32,8 @@ def get_employee_todo_progress(employee_id):
     """Write to CSV"""
     csv_file_name = f"{employee_id}.csv"
     with open(csv_file_name, 'w', newline='') as csvfile:
-        fieldnames = ["USER_ID", "USERNAME", "TASK_COMPLETED_STATUS", "TASK_TITLE"]
+        fieldnames = ["USER_ID", "USERNAME",
+                      "TASK_COMPLETED_STATUS", "TASK_TITLE"]
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 
         writer.writeheader()
@@ -39,6 +41,7 @@ def get_employee_todo_progress(employee_id):
         writer.writerows(task_records)
 
     print(f"Data exported to {csv_file_name}")
+
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
