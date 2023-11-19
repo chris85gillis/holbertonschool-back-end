@@ -35,14 +35,9 @@ def get_employee_todo_progress(employee_id):
         fieldnames = ["USER_ID", "USERNAME",
                       "TASK_COMPLETED_STATUS", "TASK_TITLE"]
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-        writer.writeheader()
         writer.writerows(task_records)
 
-    with open(csv_file_name, 'r') as csv_file:
-        csv_reader = csv.reader(csv_file)
-        next(csv_reader)
-        for row in csv_reader:
-            print(row)
+    return csv_file_name
 
 
 if __name__ == "__main__":
@@ -51,4 +46,4 @@ if __name__ == "__main__":
         sys.exit(1)
 
     employee_id = int(sys.argv[1])
-    get_employee_todo_progress(employee_id)
+    csv_file_name = get_employee_todo_progress(employee_id)
