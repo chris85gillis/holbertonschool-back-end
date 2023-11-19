@@ -35,10 +35,14 @@ def get_employee_todo_progress(employee_id):
         fieldnames = ["USER_ID", "USERNAME",
                       "TASK_COMPLETED_STATUS", "TASK_TITLE"]
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-
         writer.writeheader()
-
         writer.writerows(task_records)
+
+    """Check the number of tasks in CSV"""
+    expected_num_tasks = len(todos_data)
+    actual_num_tasks = len(task_records)
+    msg = f"Number of tasks in CSV: {'OK' if expected_num_tasks == actual_num_tasks else 'Mismatch'}"
+    print(msg)
 
     with open(csv_file_name, 'r') as csv_file:
         csv_reader = csv.reader(csv_file)
