@@ -31,11 +31,16 @@ def get_employee_todo_progress(USER_ID):
 
     return task_records
 
+
 def write_to_csv(task_records, csv_file_name):
     with open(csv_file_name, 'w', newline='') as csvfile:
-        fieldnames = ["USER_ID", "USERNAME", "TASK_COMPLETED_STATUS", "TASK_TITLE"]
-        writer = csv.DictWriter(csvfile, fieldnames=fieldnames, quoting=csv.QUOTE_ALL)
+        fieldnames = ["USER_ID", "USERNAME",
+                      "TASK_COMPLETED_STATUS",
+                      "TASK_TITLE"]
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames,
+                                quoting=csv.QUOTE_ALL)
         writer.writerows(task_records)
+
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
@@ -45,6 +50,6 @@ if __name__ == "__main__":
     USER_ID = int(sys.argv[1])
     task_records = get_employee_todo_progress(USER_ID)
 
-    # Specify a CSV file name (e.g., using the employee's username or a combination)
+    """Specify a CSV file name"""
     csv_file_name = f"{USER_ID}.csv"
     write_to_csv(task_records, csv_file_name)
