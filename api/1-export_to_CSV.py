@@ -24,5 +24,4 @@ if __name__ == "__main__":
         for task in data:
             writer.writerow(
                 [EMPLOYEE_ID, EMPLOYEE_NAME, str(task["completed"]),
-                 task["title"]]
-            )
+                 task["title"]])
