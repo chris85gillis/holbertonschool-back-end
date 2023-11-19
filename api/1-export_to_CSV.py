@@ -1,8 +1,8 @@
 #!/usr/bin/python3
 """import"""
+import csv
 import requests
 import sys
-import csv
 
 
 def get_employee_todo_progress(employee_id):
@@ -40,7 +40,11 @@ def get_employee_todo_progress(employee_id):
 
         writer.writerows(task_records)
 
-    print(f"Data exported to {csv_file_name}")
+    with open(csv_file_name, 'r') as csv_file:
+        csv_reader = csv.reader(csv_file)
+        next(csv_reader)  # Skip the header
+        for row in csv_reader:
+            print(row)
 
 
 if __name__ == "__main__":
