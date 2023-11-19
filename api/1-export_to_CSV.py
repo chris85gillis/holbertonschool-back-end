@@ -38,15 +38,9 @@ def get_employee_todo_progress(employee_id):
         writer.writeheader()
         writer.writerows(task_records)
 
-    """Check the number of tasks in CSV"""
-    expected_num_tasks = len(todos_data)
-    actual_num_tasks = len(task_records)
-    msg = f"Number of tasks in CSV: {'OK' if expected_num_tasks == actual_num_tasks else 'Mismatch'}"
-    print(msg)
-
     with open(csv_file_name, 'r') as csv_file:
         csv_reader = csv.reader(csv_file)
-        next(csv_reader)  # Skip the header
+        next(csv_reader)
         for row in csv_reader:
             print(row)
 
