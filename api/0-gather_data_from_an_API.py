@@ -1,30 +1,28 @@
 #!/usr/bin/python3
-"""import"""
-import json
+"""Requests data and API"""
+
 import requests
-import sys
+from sys import argv
 
-if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        print(f"missing employee id as argument")
-        sys.exit(1)
+url_base = 'https://jsonplaceholder.typicode.com/users/'
 
-    URL = "https://jsonplaceholder.typicode.com"
-    EMPLOYEE_ID = sys.argv[1]
 
-    EMPLOYEE_TODOS = requests.get(f"{URL}/users/{EMPLOYEE_ID}/todos",
-                                  params={"_expand": "user"})
-    data = EMPLOYEE_TODOS.json()
+def get_data():
+    """This function gets data of API"""
+    name = requests.get(url_base + argv[1]).json()
+    todos = requests.get(url_base + argv[1] + '/todos/').json()
+    count = 0
+    title = ""
 
-    EMPLOYEE_NAME = data[0]["user"]["name"]
-    TOTAL_NUMBER_OF_TASKS = len(data)
-    NUMBER_OF_DONE_TASKS = 0
-    TASK_TITLE = []
-    for task in data:
-        if task["completed"]:
-            NUMBER_OF_DONE_TASKS += 1
-            TASK_TITLE.append(task["title"])
-    print(f"Employee {EMPLOYEE_NAME} is done with tasks"
-          f"({NUMBER_OF_DONE_TASKS}/{TOTAL_NUMBER_OF_TASKS}):")
-    for title in TASK_TITLE:
-        print("\t ", title)
+    for item in todos:
+        if item['completed'] is True:
+            title += "\t {}\n".format(item['title'])
+            count += 1
+
+    print("Employee {} is done with tasks({}/20):\n{}".format(name['name'],
+                                                              count, title),
+          end='')
+
+
+if __name__ == '__main__':
+    get_data()

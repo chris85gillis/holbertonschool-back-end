@@ -1,27 +1,34 @@
 #!/usr/bin/python3
-"""import"""
-import json
-import requests
-import sys
+"""Export to json"""
 
-if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        print(f"missing employee id as argument")
-        sys.exit(1)
+from sys import argv
+from json import dump
+from requests import get
 
-    URL = "https://jsonplaceholder.typicode.com"
-    EMPLOYEE_ID = sys.argv[1]
+url_base = 'https://jsonplaceholder.typicode.com/users/'
 
-    EMPLOYEE_TODOS = requests.get(f"{URL}/users/{EMPLOYEE_ID}/todos",
-                                  params={"_expand": "user"})
-    data = EMPLOYEE_TODOS.json()
 
-    username = data[0]["user"]["username"]
-    USER_TASK = {EMPLOYEE_ID: []}
-    for task in data:
-        dic_task = {"task": task["title"], "completed": task["completed"],
-                    "username": username}
-        USER_TASK[EMPLOYEE_ID].append(dic_task)
-    fileName = f"{EMPLOYEE_ID}.json"
-    with open(fileName, "w") as file:
-        json.dump(USER_TASK, file)
+def export_json(id):
+    """function that retrieve json data"""
+
+    file_name = str(id) + '.json'
+    usr = get(url_base + str(id)).json()
+    todos = get(url_base + str(id) + '/todos/').json()
+    items_data = []
+    retrieve_json = dict()
+
+    for todo in todos:
+        item_dict = dict()
+        item_dict['task'] = todo['title']
+        item_dict['completed'] = todo['completed']
+        item_dict['username'] = usr['username']
+        items_data.append(item_dict)
+
+    retrieve_json[str(id)] = items_data
+
+    with open(file_name, 'w', encoding='utf-8') as file_json:
+        dump(retrieve_json, file_json)
+
+
+if __name__ == '__main__':
+    export_json(int(argv[1]))

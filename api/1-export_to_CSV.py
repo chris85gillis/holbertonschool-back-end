@@ -1,27 +1,26 @@
 #!/usr/bin/python3
-"""import"""
-import csv
-import requests
-import sys
+"""Exporting data in the CSV format"""
 
-if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        print(f"missing employee id as argument")
-        sys.exit(1)
+from sys import argv
+from requests import get
 
-    URL = "https://jsonplaceholder.typicode.com"
-    EMPLOYEE_ID = sys.argv[1]
+url_base = 'https://jsonplaceholder.typicode.com/users/'
 
-    EMPLOYEE_TODOS = requests.get(f"{URL}/users/{EMPLOYEE_ID}/todos",
-                                  params={"_expand": "user"})
-    data = EMPLOYEE_TODOS.json()
 
-    EMPLOYEE_NAME = data[0]["user"]["username"]
-    fileName = f"{EMPLOYEE_ID}.csv"
+def export_csv():
+    """Exports content to CSV format"""
+    usr = get(url_base + argv[1]).json()
+    tasks = get(url_base + argv[1] + '/todos').json()
+    file_name = argv[1] + '.csv'
 
-    with open(fileName, "w", newline="") as file:
-        writer = csv.writer(file, quoting=csv.QUOTE_NONNUMERIC)
-        for task in data:
-            writer.writerow(
-                [EMPLOYEE_ID, EMPLOYEE_NAME, str(task["completed"]),
-                 task["title"]])
+    for task in tasks:
+        data = '"' + str(usr['id']) + '",' + '"' + usr['username'] + '",' +\
+               '"' + str(task['completed']) + '",' + '"' + task['title'] +\
+               '"\n'
+
+        with open(file_name, 'a', encoding='utf-8') as csvfile:
+            csvfile.write(data)
+
+
+if __name__ == '__main__':
+    export_csv()
